@@ -1,26 +1,3 @@
-#include <xc.h> // include processor files - each processor file is guarded.  
-
-#define _XTAL_FREQ 16000000
-#define TOTAL_NUMBER_OF_SWITCH (8*2)
-#define TouchMatikBoardAddress 'h'
-
-
-
-#define OUTPUT_RELAY1 RB1
-#define OUTPUT_RELAY2 RC1
-#define OUTPUT_RELAY3 RA0
-#define OUTPUT_RELAY4 RF1
-#define OUTPUT_RELAY5 RA3
-#define OUTPUT_RELAY6 RA1
-#define OUTPUT_RELAY7 RA2
-#define OUTPUT_RELAY8 RB3
-
-
-//extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
-//extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
-
-void sendAcknowledgment(char* currentStateBuffer);
-
 void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTATE, char chDimmerSpeedMSB, char chDimmerSpeedLSB,
         char charParentalControl, char charFinalFrameState){
     
@@ -56,8 +33,6 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     copy_parentalLockBuffer[integerSwitchNumber]=parentalLockBuffer[integerSwitchNumber];
   //   TX1REG = parentalLockBuffer[integerSwitchNumber]; //ok same
   //   TX1REG = copy_parentalLockBuffer[integerSwitchNumber];
-    
-    
     // ACKNOWLEDGMENT data Format :->> (Gateway+SwitchState+SwitchMSB+SwitchLSB)
     
     currentStateBufferPositions = ((1+4*(integerSwitchNumber))-5);
@@ -70,6 +45,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     if(charFinalFrameState=='1')    // until 
     {
         sendAcknowledgment(currentStateBuffer+currentStateBufferPositions);  
+        if(integerSwitchNumber != 7){
         __delay_ms(5);
         TX2REG = '(' ;
         __delay_ms(1);
@@ -86,10 +62,53 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
         TX2REG='0';
         __delay_ms(1);
         TX2REG=')';
-    }
+        }
+        if(integerSwitchNumber == 7)  {
+           // TX1REG ='7';
+                switch(integerSwitchState){
+                case 0:
+                {
+                  send_Response_To_Touch('P','0','0');
+                }
+                break;
+                case 1: {
+                    if(chDimmerSpeedMSB == '0'){
+                                                                
+                        send_Response_To_Touch('P','1','1');//speed1
+                        }
+                        
+                      if(chDimmerSpeedMSB == '2')
+                        {                                          
+                             send_Response_To_Touch('P','1','1');//speed1
+                        }
+                        
+                       if(chDimmerSpeedMSB == '5')
+                        {                                          
+                            send_Response_To_Touch('P','1','2');//speed2
+                        }
+                        if(chDimmerSpeedMSB == '7')
+                        {                                          
+                            send_Response_To_Touch('P','1','3');//speed3
+                        }
+                       if(chDimmerSpeedMSB == '9')
+                        {                                          
+                           send_Response_To_Touch('P','1','4');//speed1
+                        }
+                        }
+                break;
+                 default:
+                break;
+                    }
+
+                }
+
+            }
+        
+        
+    
     
     switch(integerSwitchNumber){
-        case 1:
+  case 1:
         {
 
 
@@ -101,7 +120,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
         case 2:
             {
 
-//            TX1REG='2';
+
 
               OUTPUT_RELAY2 = integerSwitchState;
 
@@ -110,7 +129,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
         case 3:
         {
         
-//            TX1REG='3';
+
            
             OUTPUT_RELAY3 = integerSwitchState;
 
@@ -119,7 +138,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
             break;
         case 4:
         {
-//            TX1REG='4';
+
           
             OUTPUT_RELAY4 = integerSwitchState;
 
@@ -139,29 +158,90 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
             break;
         case 7:
         {
-                OUTPUT_RELAY7 = integerSwitchState;
+            if(integerSwitchState == 0)
+            {
+               
+                OUTPUT_FAN_1=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_2=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_3=OFF;
+                __delay_ms(500);
+                 OUTPUT_REGULATOR = ON;
+                __delay_ms(500);
+            }
+            else if(integerSwitchState == 1)
+            {
+                if(chDimmerSpeedMSB == '0')
+                {
+
+                OUTPUT_FAN_1=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_2=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_3=OFF;
+                __delay_ms(500); 
+                 OUTPUT_REGULATOR = ON;
+                __delay_ms(500);
+                }
+                else if(chDimmerSpeedMSB == '2')
+                {
+                OUTPUT_FAN_2=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_3=OFF;
+                __delay_ms(500); 
+                 OUTPUT_REGULATOR = ON;
+                __delay_ms(500);
+                  OUTPUT_FAN_1=ON;
+                __delay_ms(500);
+                }
+                else  if(chDimmerSpeedMSB == '5')
+                {                
+                OUTPUT_FAN_1=OFF;
+                __delay_ms(500);
+                 OUTPUT_FAN_3=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_2=ON;
+                __delay_ms(500);
+              OUTPUT_REGULATOR = ON;
+                __delay_ms(500);
+ 
+                }
+             else  if(chDimmerSpeedMSB == '7')
+                {
+                OUTPUT_FAN_3=OFF;
+                __delay_ms(500); 
+                OUTPUT_FAN_1=ON;
+                __delay_ms(500);
+                OUTPUT_FAN_2=ON;
+                __delay_ms(500);
+                OUTPUT_REGULATOR = ON;
+                __delay_ms(500);
+
+                }
+                 else  if(chDimmerSpeedMSB == '9')
+                {
+                OUTPUT_FAN_1=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_2=OFF;
+                __delay_ms(500);
+                OUTPUT_FAN_3=ON;
+                __delay_ms(500); 
+                OUTPUT_REGULATOR = ON;
+               __delay_ms(500);
+                }
+            }
         }
             break;
         case 8:
-        {          
-                OUTPUT_RELAY8 = integerSwitchState;
+        {
+#ifdef  SWITCH_8_RELAY            
+                OUTPUT_RELAY5 = integerSwitchState;
+#endif
         }
             break;
         default:
             break;
         }
     
-}
-
-
-void sendAcknowledgment(char* currentStateBuffer){
-  int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
-//        TX1REG='S';
- 		TX1REG = *currentStateBuffer;
- 		*currentStateBuffer++;
-        Tx_count++;
- 	}
 }
