@@ -1,4 +1,4 @@
-#void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char speeds
+void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char speeds
 {
 
      M1=ON;M2=ON;M3=ON;M4=ON;  M5=ON; M6=ON; M7=ON; M8=ON;
@@ -141,5 +141,3 @@
         }
     }       
 }
-
-        
