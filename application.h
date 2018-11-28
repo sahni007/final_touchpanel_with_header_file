@@ -1,6 +1,22 @@
+#include <xc.h> // include processor files - each processor file is guarded.  
+
+#define _XTAL_FREQ 16000000
+#define TOTAL_NUMBER_OF_SWITCH (8*2)
+#define TouchMatikBoardAddress 'h'
 
 
 
+#define OUTPUT_RELAY1 RB1
+#define OUTPUT_RELAY2 RC1
+#define OUTPUT_RELAY3 RA0
+#define OUTPUT_RELAY4 RF1
+
+
+
+//extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
+//extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
+
+void sendAcknowledgment(char* currentStateBuffer);
 
 void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTATE, char chDimmerSpeedMSB, char chDimmerSpeedLSB,
         char charParentalControl, char charFinalFrameState){
@@ -106,19 +122,6 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
 
         }
             break;
-        case 5:
-        {
-            
-                OUTPUT_RELAY5 = integerSwitchState;
-        }
-            break;
-            
-        case 6:
-        {
-                OUTPUT_RELAY6 = integerSwitchState;
-        }
-            break;
-
         default:
             break;
         }
@@ -126,4 +129,14 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
 }
 
 
-
+void sendAcknowledgment(char* currentStateBuffer){
+  int Tx_count=0;
+  	while(Tx_count!=4)
+ 	{ 
+        while (!TX1STAbits.TRMT);
+//        TX1REG='S';
+ 		TX1REG = *currentStateBuffer;
+ 		*currentStateBuffer++;
+        Tx_count++;
+ 	}
+}
