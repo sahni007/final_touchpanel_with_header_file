@@ -1,16 +1,15 @@
-#include <xc.h> // include processor files - each processor file is guarded.  
 
-#define _XTAL_FREQ 16000000
-void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
+  
+void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char speeds
 {
 
-        M1=ON;           M2=ON;        M3=ON;        M4=ON;          M5=ON;      M6=ON;      M7=ON;      M8=ON;
+     M1=ON;M2=ON;M3=ON;M4=ON;  M5=ON; M6=ON; M7=ON; M8=ON;
 
     int switch_status = sw_status - '0';        
     int SwNum = Switch_Num - '@';//ASCII OF SWITCH NUMBER - ASCII OF @ i.e A>>65, B>>66, C>>67, D>>68 65-64=1 and so on
-
+    int int_swSpeed = Sw_speed-'0';
     char ch_sw_num = SwNum +'0';//send '1' for switch A, '2' for sww2 and so on 
-
+    
  if(checkFlag == TRUE)  
   
  {  
@@ -18,14 +17,16 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
  }   
     else
     {
-        switch(Switch_Num) {
+ //    TX1REG='T';
+        switch(Switch_Num)
+        {
 
                case 'A':
                {
-               if(M1 == ON && copy_parentalLockBuffer[1] == CHAR_OFF )
+               if(copy_parentalLockBuffer[1] == CHAR_OFF && M1 == ON)
                   {
                        sendFeedback_TO_Gateway('1',sw_status);
-                       OUTPUT_RELAY1 = switch_status; M1 = OFF;
+                       RELAY1 = switch_status; M1 = OFF;
 
                   }
                }
@@ -34,10 +35,10 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
                case 'B':
                {
 
-                 if(M2 == ON && copy_parentalLockBuffer[2] == CHAR_OFF  )
+                 if( copy_parentalLockBuffer[2] == CHAR_OFF && M2 == ON  )
                   {       
                         sendFeedback_TO_Gateway('2',sw_status);
-                         OUTPUT_RELAY2 = switch_status;  M2 = OFF;
+                         RELAY2 = switch_status;  M2 = OFF;
 
                   }
 
@@ -46,10 +47,10 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
                break;
                case 'C':
                {
-              if(M3 == ON && copy_parentalLockBuffer[3] == CHAR_OFF )
+              if( copy_parentalLockBuffer[3] == CHAR_OFF && M3 == ON )
                  {    
                     sendFeedback_TO_Gateway('3',sw_status);
-                     OUTPUT_RELAY3 = switch_status;
+                     RELAY3 = switch_status;
                        M3 = OFF;
                   }
 
@@ -57,60 +58,16 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
                break;
                case 'D':
                {
-                   if(M4 == ON && copy_parentalLockBuffer[4] == CHAR_OFF)
+                   if(copy_parentalLockBuffer[4] == CHAR_OFF && M4 == ON  )
                   {
                        sendFeedback_TO_Gateway('4',sw_status);
-                        OUTPUT_RELAY4 = switch_status;M4 = OFF;
+                        RELAY4 = switch_status;M4 = OFF;
                  }
 
                }
                break;
-               case 'E':
-               {
-                if(M5 == ON && copy_parentalLockBuffer[5] == CHAR_OFF)
-                   {
-                         sendFeedback_TO_Gateway('5',sw_status);         
-                        OUTPUT_RELAY5 = switch_status;  M5 = OFF;
-
-                  }
-               }
-               break;
-               case 'F':
-               {
-
-                  if(M6 == ON && copy_parentalLockBuffer[6] == CHAR_OFF)
-                   {               
-                      sendFeedback_TO_Gateway('6',sw_status);  
-                      OUTPUT_RELAY6 = switch_status;M6 = OFF;
-
-                  } 
-               }
-               break;
-                case 'G':
-               {
-                  if(M7 == ON && copy_parentalLockBuffer[7] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('7',sw_status);
-                        OUTPUT_RELAY7 = switch_status;   M7 = OFF;             
-
-                  } 
-               }
-               break;
-              case 'H':
-               {
-                  if(M8 == ON && copy_parentalLockBuffer[8] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('8',sw_status);
-                        OUTPUT_RELAY8 = switch_status;  M8 = OFF;
-
-                  }
-
-               }
-               break;
-               default:
-               break;
+             default:
+             break;
         }
     }       
 }
-
-        
