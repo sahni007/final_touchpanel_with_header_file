@@ -1,11 +1,3 @@
-/* 
- * File:   applicationControl.h
- * Author: varun.sahni04@gmail.com
- *
- * Created on 10/27/2018 5:47:32 PM UTC
- * "Created in MPLAB Xpress"
- */
-
 void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTATE, char chDimmerSpeedMSB, char chDimmerSpeedLSB,
         char charParentalControl, char charFinalFrameState){
     
@@ -14,11 +6,12 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     int integerSwitchState = 0;
     int integerSpeed = 0;
     int currentStateBufferPositions=0;
+   // TX1REG = charParentalControl;
     // Get switch Number in Integer format 
     //define all used character data types and initlize it with "#"
     char switchNumberStringBuffer[2]="#";
     char dimmerSpeedStringBuffer[2]="#";
-    
+
     switchNumberStringBuffer[0]=charSwitchMSB;
     switchNumberStringBuffer[1]=charSwitchLSB;    
     integerSwitchNumber = atoi(switchNumberStringBuffer);//convert string into integer
@@ -26,7 +19,8 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     // Get switch State in Integer Format
     
     integerSwitchState = charSwitchSTATE-'0';
-    
+//    TX1REG=chDimmerSpeedMSB;
+//    TX1REG=chDimmerSpeedLSB;
     // Get speed of Fan or level of dimmer    
     dimmerSpeedStringBuffer[0]=chDimmerSpeedMSB;
     dimmerSpeedStringBuffer[1]=chDimmerSpeedLSB;    
@@ -35,7 +29,13 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     // save Parental lock state of each switch into parental lock buffer
 //    int integerParentalControl=charParentalControl-'0';
     parentalLockBuffer[integerSwitchNumber] = charParentalControl;
+   
+   
     copy_parentalLockBuffer[integerSwitchNumber]=parentalLockBuffer[integerSwitchNumber];
+  //   TX1REG = parentalLockBuffer[integerSwitchNumber]; //ok same
+  //   TX1REG = copy_parentalLockBuffer[integerSwitchNumber];
+    
+    
     // ACKNOWLEDGMENT data Format :->> (Gateway+SwitchState+SwitchMSB+SwitchLSB)
     
     currentStateBufferPositions = ((1+4*(integerSwitchNumber))-5);
@@ -47,8 +47,8 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     currentStateBufferPositions-=3;     // since we have come forward by 3 address in current state buffer
     if(charFinalFrameState=='1')    // until 
     {
-        sendAcknowledgment(currentStateBuffer+currentStateBufferPositions); 
-         __delay_ms(5);
+        sendAcknowledgment(currentStateBuffer+currentStateBufferPositions);  
+        __delay_ms(5);
         TX2REG = '(' ;
         __delay_ms(1);
         TX2REG = TouchMatikBoardAddress ;//touchmatoc address
@@ -64,34 +64,23 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
         TX2REG='0';
         __delay_ms(1);
         TX2REG=')';
-    }
+        
+        }
     
     switch(integerSwitchNumber){
         case 1:
         {
-            OUTPUT_RELAY4 = integerSwitchState;
-
-
+             RELAY1 = integerSwitchState;
         }
             break;
-
         case 2:
-        {
-               start_PWM_Generation_in_ISR_FLAG = integerSwitchState;
-               switch(integerSwitchState){
-                case 0:
-                    OUTPUT_DIMMER=1;  // For Triac --> inverted condition for off
-                    break;
-                case 1:
-                    levelofDimmer_MSB = chDimmerSpeedMSB;
-                    levelofDimmer_LSB = chDimmerSpeedLSB;
-                    break;
-                default:
-                    break;
-               }
-        }
-        break;
-           
+            {
+              RELAY2 = integerSwitchState;
+
+            break;
+            }
+
+     
         default:
             break;
         }
