@@ -3,7 +3,7 @@
  * Author: VARUN SAHNI
  *
  * Created on changed 6 june, 2018, 8:40 PM
- * this is proper working code  for 6 switch for corel
+ * this is proper working code  for 8 switch for black touch panel 
  NOTE: In this code i used header files instead of define function inside the main program itself
  * header files used:
  * 1>>>actiontouchpanel.h>>>>>carrying all information about touchpanel
@@ -49,24 +49,18 @@
 #define OUTPUT_RELAY2 RC1
 #define OUTPUT_RELAY3 RA0
 #define OUTPUT_RELAY4 RF1
-#define OUTPUT_RELAY5 RA3
-#define OUTPUT_RELAY6 RA1
 
 
 #define OUTPUT_RELAY_DIR_1 TRISBbits.TRISB1
 #define OUTPUT_RELAY_DIR_2 TRISCbits.TRISC1
 #define OUTPUT_RELAY_DIR_3 TRISAbits.TRISA0
 #define OUTPUT_RELAY_DIR_4 TRISFbits.TRISF1
-#define OUTPUT_RELAY_DIR_5 TRISAbits.TRISA3        
-#define OUTPUT_RELAY_DIR_6 TRISAbits.TRISA1 
 
 
 #define INPUTSWITCH1 RF2
 #define INPUTSWITCH2 RF3
 #define INPUTSWITCH3 RF4
 #define INPUTSWITCH4 RF5
-#define INPUTSWITCH5 RF6   
-#define INPUTSWITCH6 RD7
 
 
 
@@ -74,8 +68,6 @@
 #define INPUT_SWITCH_DIR_2 TRISFbits.TRISF3
 #define INPUT_SWITCH_DIR_3 TRISFbits.TRISF4
 #define INPUT_SWITCH_DIR_4 TRISFbits.TRISF5
-#define INPUT_SWITCH_DIR_5 TRISFbits.TRISF6
-#define INPUT_SWITCH_DIR_6 TRISDbits.TRISD7
 
 
 /*
@@ -83,8 +75,6 @@
  */
 //#define ZCD_CCP9_DIR TRISEbits.TRISE3
 // USART Directions
-
-
 #define USART_1_TRANSMIT_OUTPUT_DIR TRISCbits.TRISC6
 #define USART_1_RECIEVE_INPUT_DIR TRISCbits.TRISC7
 
@@ -138,7 +128,7 @@ unsigned char tempReceiveTouchpanelDataBuffer[TOUCHPANEL_DATA_LENGTH-8]="#";
 extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
 extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
 
-#define TouchMatikBoardAddress 'e'
+#define TouchMatikBoardAddress 'h'
 //#define DEBUG
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
 
@@ -151,7 +141,6 @@ void errorsMain(char* errNum);
 void sendFeedback_TO_Gateway(char sw_status, char Switch_Num);
 //void sendFeedback_TO_Touch(char Switch_Num_1s, char sw_status);
 
-void sendAcknowledgment(char* currentStateBuffer);
 void clearAllPorts();
 void pinINIT_extra();
 void GPIO_pin_Initialize();
@@ -508,81 +497,9 @@ R1=ON;R2=ON;R3=ON;R4=ON;R5=ON;R6=ON;R7=ON;R8=ON;
            
         }
         
-             // //check switch fifth status 
-        //off condition
-        if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUTSWITCH5 == OFF && R5 == OFF)
-        {
-            if(man==1)
-            {
-
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '5';__delay_ms(1);
-            OUTPUT_RELAY5=OFF;
-            send_Response_To_Touch('E','0');
-            }
-            man=0;
-            R5=1;
-           
-        }
-        //on condtion
-        if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUTSWITCH5 == ON && R5 == ON)
-        {
-          if(man==1)
-            {
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '5';__delay_ms(1);  
-            send_Response_To_Touch('E','1');
-            OUTPUT_RELAY5=ON;
-          }
-           man=0;
-           R5=0;
-        }
-       //off
-        if(copy_parentalLockBuffer[6] == CHAR_OFF && INPUTSWITCH6 == OFF && R6 == OFF)
-        {
-            if(man==1)
-            {
-         
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1); 
-            TX1REG = '6';__delay_ms(1);
-            send_Response_To_Touch('F','0');
-            OUTPUT_RELAY6=OFF;
-            }
-            man=0;
-            R6=1;
-           
-        }
-        //on condtion
-        if(copy_parentalLockBuffer[6] == CHAR_OFF && INPUTSWITCH6 == ON && R6 == ON)
-        {
-            if(man==1)
-            {
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '6';__delay_ms(1);  
-            send_Response_To_Touch('F','1');
-            OUTPUT_RELAY6=ON;
-            }
-            man=0;
-            R6=0;
-        }
        
-
-        
     }   
 }
-
 
 
         
@@ -600,16 +517,12 @@ void GPIO_pin_Initialize(){
     INPUT_SWITCH_DIR_2 = 1;
     INPUT_SWITCH_DIR_3 = 1;
     INPUT_SWITCH_DIR_4 = 1;
-    INPUT_SWITCH_DIR_5 = 1;
-    INPUT_SWITCH_DIR_6 = 1;
- 
+
     
     OUTPUT_RELAY_DIR_1 = 0;
     OUTPUT_RELAY_DIR_2 = 0;
     OUTPUT_RELAY_DIR_3 = 0;
     OUTPUT_RELAY_DIR_4 = 0;
-    OUTPUT_RELAY_DIR_5 = 0;
-    OUTPUT_RELAY_DIR_6 = 0;
 
     
     // peripherals directions
@@ -630,7 +543,9 @@ void GPIO_pin_Initialize(){
 void allPeripheralInit(){
     EUSART_Initialize();
     EUSART2_Initialize();
-
+//    TMR1_Initialize();
+//    TMR3_Initialize();
+   // CCP9_Initialize();
 }
 
 /*
@@ -756,17 +671,6 @@ void copyTouchpanelReceiveDataBuffer()
 /*
  * AANALOG and PULL up REGISTERS related initialization
  */
-void sendAcknowledgment(char* currentStateBuffer){
-  int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
-//        TX1REG='S';
- 		TX1REG = *currentStateBuffer;
- 		*currentStateBuffer++;
-        Tx_count++;
- 	}
-}
 void send_Response_To_Touch(char switch_no, char switch_status)
 {
        __delay_ms(5);
@@ -810,7 +714,5 @@ void clearAllPorts()
   OUTPUT_RELAY2 = 0;
   OUTPUT_RELAY3 = 0;
   OUTPUT_RELAY4 = 0;
-  OUTPUT_RELAY5 = 0;
-  OUTPUT_RELAY6 = 0;
 
 }
