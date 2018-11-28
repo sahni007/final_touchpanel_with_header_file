@@ -1,9 +1,9 @@
 /* 
  * File:   varun_4_1.c
  * Author: VARUN SAHNI
- *MOdule: 4switces and one fan module
+ *
  * Created on changed 6 june, 2018, 8:40 PM
- * this is proper working code  for 4 switch and one fan module for black touch panel 
+ * this is proper working code  for 6 switch for corel
  NOTE: In this code i used header files instead of define function inside the main program itself
  * header files used:
  * 1>>>actiontouchpanel.h>>>>>carrying all information about touchpanel
@@ -11,22 +11,10 @@
  * 3>>include.h>>this is most important file because all files are included in "include.h"
  * i defined "include.h" header file just above the ISR so, we dont need to define and declare all variable inside the header files
  */
-/* 
- * File:   4+1fan_main.c
- * Author: varun sahni
- * client: sunil kamble(shambhu)
- * module: 4 switches and 1 fan with touchpanel
- * avalability: 4 switches and 1 fan with sapphire touch panel with manual 2 switch way
- *
- * Created on 28 August, 2018, 10:59 AM
- */
-
-
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// PIC16F1526 Configuration Bit Settings
+#include <pic16f1526.h>
 
 // 'C' source line config statements
 
@@ -53,51 +41,55 @@
 // Use project enums instead of #define for ON and OFF.
 
 #include <xc.h>
-#include <pic16f1526.h>
-#define _XTAL_FREQ 16000000
+// Since we have used 16 MHz crystal
+#define _XTAL_FREQ 16000000  
+
+// Pin MACROS
+#define OUTPUT_RELAY1 RB1
+#define OUTPUT_RELAY2 RC1
+#define OUTPUT_RELAY3 RA0
+#define OUTPUT_RELAY4 RF1
+#define OUTPUT_RELAY5 RA3
+#define OUTPUT_RELAY6 RA1
+
+
+#define OUTPUT_RELAY_DIR_1 TRISBbits.TRISB1
+#define OUTPUT_RELAY_DIR_2 TRISCbits.TRISC1
+#define OUTPUT_RELAY_DIR_3 TRISAbits.TRISA0
+#define OUTPUT_RELAY_DIR_4 TRISFbits.TRISF1
+#define OUTPUT_RELAY_DIR_5 TRISAbits.TRISA3        
+#define OUTPUT_RELAY_DIR_6 TRISAbits.TRISA1 
+
+
+#define INPUTSWITCH1 RF2
+#define INPUTSWITCH2 RF3
+#define INPUTSWITCH3 RF4
+#define INPUTSWITCH4 RF5
+#define INPUTSWITCH5 RF6   
+#define INPUTSWITCH6 RD7
 
 
 
-#define REGULATOR RE3 // regulator
-#define FAN1 RE5//fan1
-#define FAN2 RE4//fan2
-#define FAN3 RE1//fan3
-
-#define REGULATOR_DIR TRISEbits.TRISE3
-#define FAN1_DIR TRISEbits.TRISE5
-#define FAN2_DIR TRISEbits.TRISE4
-#define FAN3_DIR TRISEbits.TRISE1
-
-#define RELAY1 RF1
-#define RELAY2 RF0
-#define RELAY3 RA3
-#define RELAY4 RA2
-
-#define RELAY1_DIR TRISFbits.TRISF1
-#define RELAY2_DIR TRISFbits.TRISF0
-#define RELAY3_DIR TRISAbits.TRISA3
-#define RELAY4_DIR TRISAbits.TRISA2
-
-//switch for fan
-//input switch
-#define INPUT1_SWITCH PORTFbits.RF7
-#define INPUT2_SWITCH PORTFbits.RF5
-#define INPUT3_SWITCH PORTFbits.RF3
-#define INPUT4_SWITCH PORTFbits.RF2
-#define INPUT_FAN PORTAbits.RA5
-
-#define INPUT1_SWITCH_DIR TRISFbits.TRISF7
-#define INPUT2_SWITCH_DIR TRISFbits.TRISF5
-#define INPUT3_SWITCH_DIR TRISFbits.TRISF3
-#define INPUT4_SWITCH_DIR TRISFbits.TRISF2
-#define INPUT_FAN_DIR TRISAbits.TRISA5
-
-#define UART1_TX_DIR TRISCbits.TRISC6
-#define UART1_RX_DIR TRISCbits.TRISC7
+#define INPUT_SWITCH_DIR_1 TRISFbits.TRISF2
+#define INPUT_SWITCH_DIR_2 TRISFbits.TRISF3
+#define INPUT_SWITCH_DIR_3 TRISFbits.TRISF4
+#define INPUT_SWITCH_DIR_4 TRISFbits.TRISF5
+#define INPUT_SWITCH_DIR_5 TRISFbits.TRISF6
+#define INPUT_SWITCH_DIR_6 TRISDbits.TRISD7
 
 
-#define UART2_TX_DIR TRISGbits.TRISG1                // Tx2 pin = output
-#define UART2_RX_DIR TRISGbits.TRISG2               // RX2 pin = input  
+/*
+ * Extra Periferals Direction and PORT
+ */
+//#define ZCD_CCP9_DIR TRISEbits.TRISE3
+// USART Directions
+
+
+#define USART_1_TRANSMIT_OUTPUT_DIR TRISCbits.TRISC6
+#define USART_1_RECIEVE_INPUT_DIR TRISCbits.TRISC7
+
+#define USART_2_TRANSMIT_OUTPUT_DIR TRISGbits.TRISG1
+#define USART_2_RECIEVE_INPUT_DIR TRISGbits.TRISG2
 
 #define RECIEVED_DATA_LENGTH (16*2)
 #define TOTAL_NUMBER_OF_SWITCH (8*2)
@@ -110,8 +102,12 @@
 #define CHAR_TRUE '1'
 #define CHAR_FALSE '0'
 
-#define TouchMatikBoardAddress 'd'
-// fan response switch
+/* 
+ * #define WRONG_DATA_RECIEVED_ERROR_CODE ERRX
+ * #define RECIVING_OVERRUN_ERROR EROV
+ * #define RECEIVING_DATA_LOST_IN_MAIN ERLS
+ */
+/* DATA USED IN MANUAL  STARTS HERE*/
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;unsigned int M6;unsigned int M7;unsigned int M8;
 unsigned int R1;unsigned int R2;unsigned int R3;unsigned int R4;unsigned int R5;unsigned int R6;unsigned int R7;unsigned int R8;
 
@@ -130,8 +126,7 @@ unsigned char ErrorNames[5]="####";
 volatile int mainReceivedDataPosition=0, mainDataReceived=FALSE;
 unsigned char mainReceivedDataBuffer[RECIEVED_DATA_LENGTH]="#"; 
 unsigned char tempReceivedDataBuffer[RECIEVED_DATA_LENGTH-8]="#";
-unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000";
-unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000";
+
 unsigned char currentStateBuffer[(TOTAL_NUMBER_OF_SWITCH*4)+2]="#";
 
 
@@ -140,16 +135,19 @@ int touchpanelReceivedataPosition = 0;
 volatile int touchPanelDataReceived = FALSE;
 unsigned char touchpanleReceivedDatabuffer[TOUCHPANEL_DATA_LENGTH]="#";
 unsigned char tempReceiveTouchpanelDataBuffer[TOUCHPANEL_DATA_LENGTH-8]="#";
+extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
+extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
+
+#define TouchMatikBoardAddress 'e'
+//#define DEBUG
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
 
 int start_PWM_Generation_in_ISR_FLAG=FALSE;
 char levelofDimmer_MSB='0',levelofDimmer_LSB='0';
 int checkFlag = FALSE;
-
-
 void errorsISR(char* errNum);
 void errorsMain(char* errNum);
-void sendAcknowledgment(char* currentStateBuffer);
+
 void sendFeedback_TO_Gateway(char sw_status, char Switch_Num);
 //void sendFeedback_TO_Touch(char Switch_Num_1s, char sw_status);
 
@@ -168,8 +166,9 @@ void copyReceivedDataBuffer();
 void copyTouchpanelReceiveDataBuffer();
 void applianceControl(char switchMSB, char switchLSB, char switchSTATE, char dimmerSpeedMSB, char dimmerSpeedLSB, char parentalControl, char finalFrameState);
 
-void actiontouchPanel(char Switch_Num, char sw_status,char sw_speed );//, char speeds
-void send_Response_To_Touch(char switch_no, char switch_status, char fan_speed);
+void actiontouchPanel(char Switch_Num, char sw_status );//, char speeds
+void send_Response_To_Touch(char switch_no, char switch_status);
+
 #include"include.h"
 interrupt void isr(){
 
@@ -254,25 +253,17 @@ interrupt void isr(){
 
 
 
-
-
-                
-        // ************************************* MAIN *********************************************** //
-void main() {
-    
-    
+/*
+ * Alfaone Main code starts here
+ * 
+ */
+int main()
+{
+R1=ON;R2=ON;R3=ON;R4=ON;R5=ON;R6=ON;R7=ON;R8=ON;
+//    __delay_ms(2000); 
     GPIO_pin_Initialize();
     allPeripheralInit();
-    R1=ON;R2=ON;R3=ON;R4=ON;R5=ON;
-    REGULATOR = ON;
-    FAN1 = 0;
-    FAN2 = 0;
-    FAN3 = 0;
-
-    RELAY1 = OFF;
-    RELAY2 = OFF;
-    RELAY3 = OFF;
-    RELAY4 = OFF;
+   // AllInterruptEnable();
 
     while(1)
     {
@@ -324,7 +315,7 @@ void main() {
         ///STARTING OF TOUCHPANEL DATA RECEIVE
         if(touchPanelDataReceived == TRUE)
         {
-          
+          //  TX1REG = 'R';
             touchPanelDataReceived = FALSE;
             int start_flag = 0;
             int end_flag = 0;
@@ -341,9 +332,7 @@ void main() {
                         copyTouchpanelReceiveDataBuffer();
                         if(tempReceiveTouchpanelDataBuffer[0] != '@')
                         {
-                           actiontouchPanel(tempReceiveTouchpanelDataBuffer[0]
-                                   ,tempReceiveTouchpanelDataBuffer[1]
-                                   ,tempReceiveTouchpanelDataBuffer[2]); //,tempReceiveTouchpanelDataBuffer[2]
+                           actiontouchPanel(tempReceiveTouchpanelDataBuffer[0],tempReceiveTouchpanelDataBuffer[1]); //,tempReceiveTouchpanelDataBuffer[2]
                             start_flag = 0;
                             end_flag = 0;
                          }
@@ -365,114 +354,116 @@ void main() {
                     RC2STAbits.SPEN=1;  // Serial port enabled (configures RXx/DTx and TXx/CKx pins as serial port pins)
                  }
             
-        }//end of touchpanel received data
+        }
         
+       
+    
+    
+    
+       /******************** MANUAL RESPONE STARTS HERE************ */
         
-        
-        
-         /******************** MANUAL RESPONE STARTS HERE************ */
-        
-        
-        
-        int man=1;
-         if(copy_parentalLockBuffer[1] == CHAR_OFF && INPUT1_SWITCH == OFF && R1 == OFF)
+        //check switch one status
+        //off condition
+       int man = 1;
+        if(copy_parentalLockBuffer[1] == CHAR_OFF && INPUTSWITCH1 == OFF && R1 == OFF)
         {
-         //   if(man == 1)
-         //   {
+            if(man == 1)
+            {
+        //    TX1REG='T';
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
-            send_Response_To_Touch('A','0','0');
-            RELAY1=OFF;
-         //   }
-         //   man=0;
+            send_Response_To_Touch('A','0');
+            OUTPUT_RELAY1=OFF;
+            }
+            man=0;
             R1=1;
             
         }
         //on condition
-        if(copy_parentalLockBuffer[1] == CHAR_OFF && INPUT1_SWITCH == ON &&  R1 == ON)
+        if(copy_parentalLockBuffer[1] == CHAR_OFF && INPUTSWITCH1 == ON &&  R1 == ON)
         {
-         //  if(man==1)
-         //  {
-               
-             
+           if(man==1)
+           {
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
-            send_Response_To_Touch('A','1','0');
-            RELAY1=ON;
-         //  }
-          //  man=0;
+            send_Response_To_Touch('A','1');
+            OUTPUT_RELAY1=ON;
+           }
+            man=0;
             R1=0;
         }
         
        // //check switch second status 
         //off condition
-        if(copy_parentalLockBuffer[2] == CHAR_OFF && INPUT2_SWITCH == OFF && R2 == OFF)
+        if(copy_parentalLockBuffer[2] == CHAR_OFF && INPUTSWITCH2 == OFF && R2 == OFF)
         {
-         //   if(man==1)
-         //   {
-            
+            if(man==1)
+            {
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '2';__delay_ms(1);
-            send_Response_To_Touch('B','0','0');
-            RELAY2=OFF;
-          //  }
-         //   man=0;
+            send_Response_To_Touch('B','0');
+            OUTPUT_RELAY2=OFF;
+            }
+            man=0;
             R2=1;
         }
         //on condtion
-        if(copy_parentalLockBuffer[2] == CHAR_OFF && INPUT2_SWITCH == ON && R2 == ON)
+        if(copy_parentalLockBuffer[2] == CHAR_OFF && INPUTSWITCH2 == ON && R2 == ON)
         {
-         //   if(man==1)
-         //   {
-           
+            if(man==1)
+            {
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '2';__delay_ms(1);
-            send_Response_To_Touch('B','1','0');
-           RELAY2=ON;
-         //   }
-         //   man=0;
+            send_Response_To_Touch('B','1');
+            OUTPUT_RELAY2=ON;
+            }
+            man=0;
             R2=0;
         }
         
         
        // //check switch third status 
         //off condition
-        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUT3_SWITCH == OFF && R3 == OFF)
+        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUTSWITCH3 == OFF && R3 == OFF)
         {
             if(man == 1)
             {
-            
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '3';__delay_ms(1);
-            send_Response_To_Touch('C','0','0');
-            RELAY3=OFF;
+            send_Response_To_Touch('C','0');
+            OUTPUT_RELAY3=OFF;
             }
             man=0;
             R3=1;
           
         }
         //on condtion
-        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUT3_SWITCH == ON && R3 == ON)
+        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUTSWITCH3 == ON && R3 == ON)
         {
             if(man==1)
             {
-            
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '3';__delay_ms(1);
-            send_Response_To_Touch('C','1','0');
-            RELAY3=ON;
+            send_Response_To_Touch('C','1');
+            OUTPUT_RELAY3=ON;
             }
             man=0;
             R3=0;
@@ -482,195 +473,169 @@ void main() {
         
        // //check switch fourth status 
         //off condition
-        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUT4_SWITCH == OFF && R4 == OFF)
+        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUTSWITCH4 == OFF && R4 == OFF)
         {
             if(man==1)
             {
-            
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '4';__delay_ms(1);
-            send_Response_To_Touch('D','0','0');
-            RELAY4=OFF;
+            send_Response_To_Touch('D','0');
+            OUTPUT_RELAY4=OFF;
             }
             man=0;
             R4=1;
             
         }
         //on condtion
-        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUT4_SWITCH == ON && R4 == ON)
+        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUTSWITCH4 == ON && R4 == ON)
         {
             if(man==1)
             {
-            
+            __delay_ms(5);
             TX1REG = 'R';__delay_ms(1);
             TX1REG = '1';__delay_ms(1);
             TX1REG = '0';__delay_ms(1);
             TX1REG = '4';__delay_ms(1);
-            send_Response_To_Touch('D','1','0');
-             RELAY4=ON;
+            send_Response_To_Touch('D','1');
+            OUTPUT_RELAY4=ON;
             }
             man=0;
             R4=0;
            
-        } 
-       // manual for fan
-         if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUT_FAN == ON && R5==ON )
-         {
-             if(man==1)
-             {
-                    TX1REG='R';__delay_ms(1);
-                    TX1REG='1';__delay_ms(1);
-                    TX1REG='0';__delay_ms(1);
-                    TX1REG='5';__delay_ms(1);
-                    REGULATOR = OFF;
-                    send_Response_To_Touch('P','1','1');
-  
-             }
-             man=1;
-            
-             R5=OFF;
-         }
-        if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUT_FAN == OFF && R5==OFF)
-         {
+        }
+        
+             // //check switch fifth status 
+        //off condition
+        if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUTSWITCH5 == OFF && R5 == OFF)
+        {
             if(man==1)
             {
-                    TX1REG='R';__delay_ms(1);
-                    TX1REG='0';__delay_ms(1);
-                    TX1REG='0';__delay_ms(1);
-                    TX1REG='5';__delay_ms(1);
-                                 REGULATOR=ON; 
-                                  __delay_ms(1000);
-                                  FAN1=OFF;//OFF;
-                                  __delay_ms(1000);
-                                  FAN2=OFF;//OFF;
-                                 __delay_ms(1000);
-                                  FAN3=OFF;
-                  send_Response_To_Touch('P','0','0');
-     
+
+            __delay_ms(5);
+            TX1REG = 'R';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1);
+            TX1REG = '5';__delay_ms(1);
+            OUTPUT_RELAY5=OFF;
+            send_Response_To_Touch('E','0');
             }
-            man=1;
+            man=0;
+            R5=1;
            
-            R5=ON;
-         }
+        }
+        //on condtion
+        if(copy_parentalLockBuffer[5] == CHAR_OFF && INPUTSWITCH5 == ON && R5 == ON)
+        {
+          if(man==1)
+            {
+            __delay_ms(5);
+            TX1REG = 'R';__delay_ms(1);
+            TX1REG = '1';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1);
+            TX1REG = '5';__delay_ms(1);  
+            send_Response_To_Touch('E','1');
+            OUTPUT_RELAY5=ON;
+          }
+           man=0;
+           R5=0;
+        }
+       //off
+        if(copy_parentalLockBuffer[6] == CHAR_OFF && INPUTSWITCH6 == OFF && R6 == OFF)
+        {
+            if(man==1)
+            {
+         
+            __delay_ms(5);
+            TX1REG = 'R';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1); 
+            TX1REG = '6';__delay_ms(1);
+            send_Response_To_Touch('F','0');
+            OUTPUT_RELAY6=OFF;
+            }
+            man=0;
+            R6=1;
+           
+        }
+        //on condtion
+        if(copy_parentalLockBuffer[6] == CHAR_OFF && INPUTSWITCH6 == ON && R6 == ON)
+        {
+            if(man==1)
+            {
+            __delay_ms(5);
+            TX1REG = 'R';__delay_ms(1);
+            TX1REG = '1';__delay_ms(1);
+            TX1REG = '0';__delay_ms(1);
+            TX1REG = '6';__delay_ms(1);  
+            send_Response_To_Touch('F','1');
+            OUTPUT_RELAY6=ON;
+            }
+            man=0;
+            R6=0;
+        }
        
-    }//end of while
-   
+
+        
+    }   
 }
 
-  
 
+
+        
+    
+
+
+/*
+ * All input output pin initialization
+ */
+void GPIO_pin_Initialize(){
+    clearAllPorts();
+    pinINIT_extra();
+
+     INPUT_SWITCH_DIR_1 = 1;
+    INPUT_SWITCH_DIR_2 = 1;
+    INPUT_SWITCH_DIR_3 = 1;
+    INPUT_SWITCH_DIR_4 = 1;
+    INPUT_SWITCH_DIR_5 = 1;
+    INPUT_SWITCH_DIR_6 = 1;
+ 
+    
+    OUTPUT_RELAY_DIR_1 = 0;
+    OUTPUT_RELAY_DIR_2 = 0;
+    OUTPUT_RELAY_DIR_3 = 0;
+    OUTPUT_RELAY_DIR_4 = 0;
+    OUTPUT_RELAY_DIR_5 = 0;
+    OUTPUT_RELAY_DIR_6 = 0;
+
+    
+    // peripherals directions
+  //  ZCD_CCP9_DIR = 1;
+    // USART DIRECTIONS
+    USART_1_TRANSMIT_OUTPUT_DIR = 0;
+    USART_1_RECIEVE_INPUT_DIR = 1;
+    
+    USART_2_TRANSMIT_OUTPUT_DIR = 0;
+    USART_2_TRANSMIT_OUTPUT_DIR = 1;
+    
+    clearAllPorts();
+}
+
+/*
+ * ALL Peripheral Initialization
+ */
 void allPeripheralInit(){
     EUSART_Initialize();
     EUSART2_Initialize();
 
 }
-void copyReceivedDataBuffer(){
-    int dataBufferCounter=2;
-    for(dataBufferCounter=2;dataBufferCounter<9;dataBufferCounter++){
-        tempReceivedDataBuffer[dataBufferCounter-2]=mainReceivedDataBuffer[dataBufferCounter]; // copy data buffer from main
-        mainReceivedDataBuffer[dataBufferCounter]='#';  // clean data buffer
-    }
-}
-void sendAcknowledgment(char* currentStateBuffer){
-  int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
 
- 		TX1REG = *currentStateBuffer;
- 		*currentStateBuffer++;
-        Tx_count++;
- 	}
-}
-void errorsISR(char* errNum){
-    int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
- 		TX1REG = *errNum;
- 		*errNum++;
-        Tx_count++;
- 	}
-}
-void errorsMain(char* errNum){
-   int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
- 		TX1REG = *errNum;
- 		*errNum++;
-        Tx_count++;
- 	}
-}
-
-void sendFeedback_TO_Gateway(char Switch_Num, char sw_status)
-{
-     __delay_ms(5);     TX1REG = 'R';
-    __delay_ms(1);      TX1REG = sw_status;
-    __delay_ms(1);      TX1REG = '0';
-    __delay_ms(1);      TX1REG = Switch_Num;
-}
- 
-void GPIO_pin_Initialize() {         
-    clearAllPorts();
-    pinINIT_extra();
-    
-    INPUT_FAN_DIR=1;
-    INPUT1_SWITCH_DIR=1;
-    INPUT2_SWITCH_DIR=1;
-    INPUT3_SWITCH_DIR=1;
-    INPUT4_SWITCH_DIR=1;
-    
-    RELAY1_DIR=0;
-    RELAY2_DIR=0;
-    RELAY3_DIR=0;
-    RELAY4_DIR=0;
-    
-    REGULATOR_DIR=0;
-    FAN1_DIR=0;
-    FAN2_DIR=0;
-    FAN3_DIR=0;
-    
-    UART2_TX_DIR=0;//tx2 ouuput
-    UART2_RX_DIR=1;//rx2 input
-    
-    UART1_TX_DIR=0;//tx1 output
-    UART1_RX_DIR=1;//rx1 input
-    
-  clearAllPorts();
-}
-void copyTouchpanelReceiveDataBuffer() ///(fp1100))
-{
-     int dataBufferCounter=2;
-     for(dataBufferCounter=2; dataBufferCounter<5;dataBufferCounter++)
-     {
-         tempReceiveTouchpanelDataBuffer[dataBufferCounter-2] = touchpanleReceivedDatabuffer[dataBufferCounter];
-         touchpanleReceivedDatabuffer[dataBufferCounter] = "#";
-     }
-}
-void send_Response_To_Touch(char switch_no, char switch_status, char fan_speed)
-{
-       __delay_ms(5);
-        TX2REG = '(' ;
-        __delay_ms(1);
-        TX2REG = TouchMatikBoardAddress ;//touchmatoc address
-        __delay_ms(1);
-        TX2REG =switch_no ;
-        __delay_ms(1);
-        TX2REG=switch_status;
-        __delay_ms(1);
-        TX2REG=fan_speed;
-        __delay_ms(1);
-        TX2REG='0';
-        __delay_ms(1);
-        TX2REG='0';
-        __delay_ms(1);
-        TX2REG=')';
-    }
+/*
+ * USART Control Registers initialization
+ */
 void EUSART_Initialize(){
-    // disable interrupts before changing states
     PIE1bits.RC1IE = 0;
     PIE1bits.TX1IE = 0;
 
@@ -707,8 +672,8 @@ void EUSART_Initialize(){
     // Serial Port Enabled
     RC1STAbits.SPEN = 1;
 }
-void EUSART2_Initialize(){
-    // disable interrupts before changing states
+void EUSART2_Initialize()
+{
     PIE4bits.RC2IE = 0;
     PIE4bits.TX2IE = 0;
 
@@ -736,13 +701,79 @@ void EUSART2_Initialize(){
 
     // enable receive interrupt    
     PIE4bits.RC2IE = 1; // handled into INTERRUPT_Initialize()
-    
     // Transmit Enabled
     TX2STAbits.TXEN = 1;
 
     // Serial Port Enabled
     RC2STAbits.SPEN = 1;
 }
+void errorsISR(char* errNum){
+    int Tx_count=0;
+  	while(Tx_count!=4)
+ 	{ 
+        while (!TX1STAbits.TRMT);
+ 		TX1REG = *errNum;
+ 		*errNum++;
+        Tx_count++;
+ 	}
+}
+void errorsMain(char* errNum){
+   int Tx_count=0;
+  	while(Tx_count!=4)
+ 	{ 
+        while (!TX1STAbits.TRMT);
+ 		TX1REG = *errNum;
+ 		*errNum++;
+        Tx_count++;
+ 	}
+}
+
+
+void copyReceivedDataBuffer(){
+    int dataBufferCounter=2;
+    for(dataBufferCounter=2;dataBufferCounter<9;dataBufferCounter++){
+        tempReceivedDataBuffer[dataBufferCounter-2]=mainReceivedDataBuffer[dataBufferCounter]; // copy data buffer from main
+        mainReceivedDataBuffer[dataBufferCounter]='#';  // clean data buffer
+    }
+}
+void sendFeedback_TO_Gateway(char Switch_Num, char sw_status)
+{
+     __delay_ms(5);     TX1REG = 'R';
+    __delay_ms(1);      TX1REG = sw_status;
+    __delay_ms(1);      TX1REG = '0';
+    __delay_ms(1);      TX1REG = Switch_Num;
+}
+void copyTouchpanelReceiveDataBuffer()
+{
+     int dataBufferCounter=2;
+     for(dataBufferCounter=2; dataBufferCounter<5;dataBufferCounter++)
+     {
+         tempReceiveTouchpanelDataBuffer[dataBufferCounter-2] = touchpanleReceivedDatabuffer[dataBufferCounter];
+         touchpanleReceivedDatabuffer[dataBufferCounter] = "#";
+     }
+}
+/*
+ * AANALOG and PULL up REGISTERS related initialization
+ */
+void send_Response_To_Touch(char switch_no, char switch_status)
+{
+       __delay_ms(5);
+        TX2REG = '(' ;
+        __delay_ms(1);
+        TX2REG = TouchMatikBoardAddress ;//touchmatoc address
+        __delay_ms(1);
+        TX2REG =switch_no ;
+        __delay_ms(1);
+        TX2REG=switch_status;
+        __delay_ms(1);
+        TX2REG='0';
+        __delay_ms(1);
+        TX2REG='0';
+        __delay_ms(1);
+        TX2REG='0';
+        __delay_ms(1);
+        TX2REG=')';
+    }
 void pinINIT_extra(){
     ANSELG=0x00;    WPUG = 0;
     
@@ -756,15 +787,18 @@ void pinINIT_extra(){
     
     ANSELA=0x00;     
 } 
+
+/*
+ * always clear all the ports before initialization
+ */
 void clearAllPorts()
 {
-    FAN1=OFF;
-    FAN2=OFF;
-    FAN3=OFF;
-    REGULATOR=OFF;
-    RELAY1=OFF;
-    RELAY2=OFF;
-    RELAY3=OFF;
-    RELAY4=OFF;
-}
+  //  TX1REG='C';
+  OUTPUT_RELAY1 = 0;
+  OUTPUT_RELAY2 = 0;
+  OUTPUT_RELAY3 = 0;
+  OUTPUT_RELAY4 = 0;
+  OUTPUT_RELAY5 = 0;
+  OUTPUT_RELAY6 = 0;
 
+}
