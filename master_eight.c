@@ -151,6 +151,7 @@ void errorsMain(char* errNum);
 void sendFeedback_TO_Gateway(char sw_status, char Switch_Num);
 //void sendFeedback_TO_Touch(char Switch_Num_1s, char sw_status);
 
+void sendAcknowledgment(char* currentStateBuffer);
 void clearAllPorts();
 void pinINIT_extra();
 void GPIO_pin_Initialize();
@@ -755,6 +756,17 @@ void copyTouchpanelReceiveDataBuffer()
 /*
  * AANALOG and PULL up REGISTERS related initialization
  */
+void sendAcknowledgment(char* currentStateBuffer){
+  int Tx_count=0;
+  	while(Tx_count!=4)
+ 	{ 
+        while (!TX1STAbits.TRMT);
+//        TX1REG='S';
+ 		TX1REG = *currentStateBuffer;
+ 		*currentStateBuffer++;
+        Tx_count++;
+ 	}
+}
 void send_Response_To_Touch(char switch_no, char switch_status)
 {
        __delay_ms(5);
