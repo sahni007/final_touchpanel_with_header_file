@@ -19,32 +19,16 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
         preventFlag = 2;
         
     } 
-//    if(PreventFlag_ManualTo_Panel==1)//to prevent manual>>this flag set means manual is pressed but send from don't receive again 
-//    {
-//        TX1REG='T';TX1REG='2';
-//        PreventFlag_ManualTo_Panel=0;
-//    }
+
     if(CheckFlag2 == 1 && preventFlag!=2 )//to check is only coming from only uart2>>checkflag2>>uart2 and preventfalg>>uart1
     {
-   //     TX1REG='T';TX1REG='3';
+
         PreventFlag_ManualTo_Panel=0;
          checkFlag=0;
         preventFlag=0;
         CheckFlag2=0;
         PreventFlag_Touch=2;
-//                if(tempReceiveTouchpanelDataBuffer[0] != 'P'){
-//                 __delay_ms(5);      TX1REG = 'G';
-//                 __delay_ms(1);      TX1REG = sw_status;
-//                 __delay_ms(1);      TX1REG = '0';
-//                 __delay_ms(1);      TX1REG = Switch_Num - 16;
-//                 }
-//                 else
-//                 {
-//                 __delay_ms(5);      TX1REG = 'G';
-//                 __delay_ms(1);      TX1REG = sw_status;
-//                 __delay_ms(1);      TX1REG = '0';
-//                 __delay_ms(1);      TX1REG = '7';    
-//                 }
+
 
 
                  switch(Switch_Num) {
@@ -53,7 +37,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                     if(M1 == ON && copy_parentalLockBuffer[1] == CHAR_OFF )
                       {    
-                            sendFeedback_TO_Gateway('1',sw_status);
+                            sendFeedback_TO_Gateway(sw_status,'1');
                             OUTPUT_RELAY1 = switch_status;
                             M1 = OFF;
                        }
@@ -64,7 +48,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                       if(M2 == ON && copy_parentalLockBuffer[2] == CHAR_OFF  )
                        {
-                          sendFeedback_TO_Gateway('2',sw_status);
+                          sendFeedback_TO_Gateway(sw_status,'2');
                               M2 = OFF;
                               OUTPUT_RELAY2 = switch_status;  
                        }
@@ -75,7 +59,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                    if(M3 == ON && copy_parentalLockBuffer[3] == CHAR_OFF )
                       {
-                       sendFeedback_TO_Gateway('3',sw_status);
+                       sendFeedback_TO_Gateway(sw_status,'3');
                              OUTPUT_RELAY3 = switch_status;
                             M1 = OFF;
                        }
@@ -85,7 +69,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                         if(M4 == ON && copy_parentalLockBuffer[4] == CHAR_OFF)
                        {
-                            sendFeedback_TO_Gateway('4',sw_status);
+                            sendFeedback_TO_Gateway(sw_status,'4');
                             M4 = OFF;
                              OUTPUT_RELAY4 = switch_status;
                       }
@@ -96,7 +80,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                      if(M5 == ON && copy_parentalLockBuffer[5] == CHAR_OFF)
                         {
-                         sendFeedback_TO_Gateway('5',sw_status);
+                         sendFeedback_TO_Gateway(sw_status,'5');
                              M5 = OFF;
                              OUTPUT_RELAY5 = switch_status;
 
@@ -107,7 +91,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
                        if(M6 == ON && copy_parentalLockBuffer[6] == CHAR_OFF)
                         {
-                           sendFeedback_TO_Gateway('6',sw_status);
+                           sendFeedback_TO_Gateway(sw_status,'6');
                              M6 = OFF;
                              OUTPUT_RELAY6 = switch_status;
 
@@ -119,7 +103,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char speeds) //, char spe
                     {
 
                        if(M7 == ON && copy_parentalLockBuffer[7] == CHAR_OFF) {
-                           sendFeedback_TO_Gateway('7',sw_status); 
+                           sendFeedback_TO_Gateway(sw_status,'7'); 
                            M7 = OFF;
                          __delay_ms(1);
                          if(sw_status == '0')
