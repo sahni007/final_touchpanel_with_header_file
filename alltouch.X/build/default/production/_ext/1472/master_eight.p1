@@ -27,7 +27,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PORTEbits `VS41 ~T0 @X0 0 e@16 ]
 "137 ../master_eight.c
 [v _sendFeedback_TO_Gateway `(v ~T0 @X0 0 ef2`uc`uc ]
-"9353 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16f1526.h
+"3310 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16f1526.h
+[v _TX1REG `Vuc ~T0 @X0 0 e@410 ]
+"9353
 [v _RC2IF `Vb ~T0 @X0 0 e@165 ]
 "7420
 [s S382 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -134,15 +136,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _errorsMain `(v ~T0 @X0 0 ef1`*uc ]
 "150
 [v _copyTouchpanelReceiveDataBuffer `(v ~T0 @X0 0 ef ]
-"5205 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16f1526.h
-[s S261 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S261 . RF0 RF1 RF2 RF3 RF4 RF5 RF6 RF7 ]
-"5204
-[u S260 `S261 1 ]
-[n S260 . . ]
-"5216
-[v _PORTFbits `VS260 ~T0 @X0 0 e@652 ]
-"138 ../master_eight.c
+"138
 [v _clearAllPorts `(v ~T0 @X0 0 ef ]
 "139
 [v _pinINIT_extra `(v ~T0 @X0 0 ef ]
@@ -266,8 +260,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S51 . . ]
 "965
 [v _PIR4bits `VS51 ~T0 @X0 0 e@20 ]
-"3310
-[v _TX1REG `Vuc ~T0 @X0 0 e@410 ]
 "6578
 [v _ANSELG `Vuc ~T0 @X0 0 e@1037 ]
 "7229
@@ -4384,12 +4376,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 "99
 [e :UE 464 ]
 }
-"1 ../actionTouchpanel.h
+"1 ../actiontouchpanel.h
 [v _actiontouchPanel `(v ~T0 @X0 1 ef3`uc`uc`uc ]
 "2
 {
-[; ;actionTouchpanel.h: 1: void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed)
-[; ;actionTouchpanel.h: 2: {
+[; ;actiontouchpanel.h: 1: void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed)
+[; ;actiontouchpanel.h: 2: {
 [e :U _actiontouchPanel ]
 "1
 [v _Switch_Num `uc ~T0 @X0 1 r1 ]
@@ -4397,7 +4389,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _Sw_speed `uc ~T0 @X0 1 r3 ]
 "2
 [f ]
-[; ;actionTouchpanel.h: 4: M1=1;M2=1;M3=1;M4=1;
+[; ;actiontouchpanel.h: 4: M1=1;M2=1;M3=1;M4=1;
 "4
 [e = _M1 -> -> 1 `i `ui ]
 [e = _M2 -> -> 1 `i `ui ]
@@ -4405,129 +4397,135 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _M4 -> -> 1 `i `ui ]
 "5
 [v _switch_status `i ~T0 @X0 1 a ]
-[; ;actionTouchpanel.h: 5: int switch_status = sw_status - '0';
+[; ;actiontouchpanel.h: 5: int switch_status = sw_status - '0';
 [e = _switch_status -> - -> _sw_status `ui -> 48 `ui `i ]
 "6
 [v _SwNum `i ~T0 @X0 1 a ]
-[; ;actionTouchpanel.h: 6: int SwNum = Switch_Num - '@';
+[; ;actiontouchpanel.h: 6: int SwNum = Switch_Num - '@';
 [e = _SwNum -> - -> _Switch_Num `ui -> 64 `ui `i ]
 "7
 [v _int_swSpeed `i ~T0 @X0 1 a ]
-[; ;actionTouchpanel.h: 7: int int_swSpeed = Sw_speed-'0';
+[; ;actiontouchpanel.h: 7: int int_swSpeed = Sw_speed-'0';
 [e = _int_swSpeed -> - -> _Sw_speed `ui -> 48 `ui `i ]
 "8
 [v _ch_sw_num `uc ~T0 @X0 1 a ]
-[; ;actionTouchpanel.h: 8: char ch_sw_num = SwNum +'0';
+[; ;actiontouchpanel.h: 8: char ch_sw_num = SwNum +'0';
 [e = _ch_sw_num -> + -> _SwNum `ui -> 48 `ui `uc ]
-[; ;actionTouchpanel.h: 10: if(checkFlag == 1)
+[; ;actiontouchpanel.h: 10: if(checkFlag == 1)
 "10
 [e $ ! == _checkFlag -> 1 `i 477  ]
-[; ;actionTouchpanel.h: 12: {
+[; ;actiontouchpanel.h: 12: {
 "12
 {
-[; ;actionTouchpanel.h: 13: checkFlag=0;
+[; ;actiontouchpanel.h: 13: checkFlag=0;
 "13
 [e = _checkFlag -> 0 `i ]
 "14
 }
-[; ;actionTouchpanel.h: 14: }
+[; ;actiontouchpanel.h: 14: }
 [e $U 478  ]
 "15
 [e :U 477 ]
-[; ;actionTouchpanel.h: 15: else
-[; ;actionTouchpanel.h: 16: {
+[; ;actiontouchpanel.h: 15: else
+[; ;actiontouchpanel.h: 16: {
 "16
 {
-[; ;actionTouchpanel.h: 18: switch(Switch_Num)
+[; ;actiontouchpanel.h: 18: switch(Switch_Num)
 "18
 [e $U 480  ]
-[; ;actionTouchpanel.h: 19: {
+[; ;actiontouchpanel.h: 19: {
 "19
 {
-[; ;actionTouchpanel.h: 21: case 'A':
+[; ;actiontouchpanel.h: 21: case 'A':
 "21
 [e :U 481 ]
-[; ;actionTouchpanel.h: 22: {
+[; ;actiontouchpanel.h: 22: {
 "22
 {
-[; ;actionTouchpanel.h: 23: if(copy_parentalLockBuffer[1] == '0' && M1 == 1)
+[; ;actiontouchpanel.h: 23: if(copy_parentalLockBuffer[1] == '0' && M1 == 1)
 "23
 [e $ ! && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 1 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M1 -> -> 1 `i `ui 482  ]
-[; ;actionTouchpanel.h: 24: {
+[; ;actiontouchpanel.h: 24: {
 "24
 {
-[; ;actionTouchpanel.h: 25: sendFeedback_TO_Gateway('1',sw_status);
+[; ;actiontouchpanel.h: 25: sendFeedback_TO_Gateway('1',sw_status);
 "25
 [e ( _sendFeedback_TO_Gateway (2 , -> -> 49 `ui `uc _sw_status ]
-[; ;actionTouchpanel.h: 26: PORTAbits.RA2 = switch_status; M1 = 0;
+[; ;actiontouchpanel.h: 26: PORTAbits.RA2 = switch_status; M1 = 0;
 "26
 [e = . . _PORTAbits 0 2 -> _switch_status `uc ]
 [e = _M1 -> -> 0 `i `ui ]
-"28
-}
-[e :U 482 ]
+[; ;actiontouchpanel.h: 27: TX1REG= 'A';
+"27
+[e = _TX1REG -> -> 65 `ui `uc ]
 "29
 }
-[; ;actionTouchpanel.h: 28: }
-[; ;actionTouchpanel.h: 29: }
-[; ;actionTouchpanel.h: 31: break;
-"31
-[e $U 479  ]
-[; ;actionTouchpanel.h: 32: case 'B':
+[e :U 482 ]
+"30
+}
+[; ;actiontouchpanel.h: 29: }
+[; ;actiontouchpanel.h: 30: }
+[; ;actiontouchpanel.h: 32: break;
 "32
-[e :U 483 ]
-[; ;actionTouchpanel.h: 33: {
+[e $U 479  ]
+[; ;actiontouchpanel.h: 33: case 'B':
 "33
+[e :U 483 ]
+[; ;actiontouchpanel.h: 34: {
+"34
 {
-[; ;actionTouchpanel.h: 35: if( copy_parentalLockBuffer[2] == '0' && M2 == 1 )
-"35
-[e $ ! && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 2 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M2 -> -> 1 `i `ui 484  ]
-[; ;actionTouchpanel.h: 36: {
+[; ;actiontouchpanel.h: 36: if( copy_parentalLockBuffer[2] == '0' && M2 == 1 )
 "36
-{
-[; ;actionTouchpanel.h: 37: start_PWM_Generation_in_ISR_FLAG=0;
+[e $ ! && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 2 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M2 -> -> 1 `i `ui 484  ]
+[; ;actiontouchpanel.h: 37: {
 "37
-[e = _start_PWM_Generation_in_ISR_FLAG -> 0 `i ]
-[; ;actionTouchpanel.h: 38: sendFeedback_TO_Gateway('2',sw_status);
+{
+[; ;actiontouchpanel.h: 38: start_PWM_Generation_in_ISR_FLAG=0;
 "38
-[e ( _sendFeedback_TO_Gateway (2 , -> -> 50 `ui `uc _sw_status ]
-[; ;actionTouchpanel.h: 39: PORTEbits.RE5 = ~switch_status; M2 = 0;
+[e = _start_PWM_Generation_in_ISR_FLAG -> 0 `i ]
+[; ;actiontouchpanel.h: 39: sendFeedback_TO_Gateway('2',sw_status);
 "39
+[e ( _sendFeedback_TO_Gateway (2 , -> -> 50 `ui `uc _sw_status ]
+[; ;actiontouchpanel.h: 40: PORTEbits.RE5 = ~switch_status; M2 = 0;
+"40
 [e = . . _PORTEbits 0 5 -> ~ _switch_status `uc ]
 [e = _M2 -> -> 0 `i `ui ]
+[; ;actiontouchpanel.h: 41: TX1REG= 'B';
 "41
-}
-[e :U 484 ]
+[e = _TX1REG -> -> 66 `ui `uc ]
 "43
 }
-[; ;actionTouchpanel.h: 41: }
-[; ;actionTouchpanel.h: 43: }
-[; ;actionTouchpanel.h: 45: break;
+[e :U 484 ]
 "45
-[e $U 479  ]
-[; ;actionTouchpanel.h: 46: default:
-"46
-[e :U 485 ]
-[; ;actionTouchpanel.h: 47: break;
+}
+[; ;actiontouchpanel.h: 43: }
+[; ;actiontouchpanel.h: 45: }
+[; ;actiontouchpanel.h: 47: break;
 "47
 [e $U 479  ]
+[; ;actiontouchpanel.h: 48: default:
 "48
+[e :U 485 ]
+[; ;actiontouchpanel.h: 49: break;
+"49
+[e $U 479  ]
+"50
 }
-[; ;actionTouchpanel.h: 48: }
+[; ;actiontouchpanel.h: 50: }
 [e $U 479  ]
 "18
 [e :U 480 ]
 [e [\ _Switch_Num , $ -> -> 65 `ui `uc 481
  , $ -> -> 66 `ui `uc 483
  485 ]
-"48
+"50
 [e :U 479 ]
-"49
+"51
 }
 [e :U 478 ]
-[; ;actionTouchpanel.h: 49: }
-[; ;actionTouchpanel.h: 50: }
-"50
+[; ;actiontouchpanel.h: 51: }
+[; ;actiontouchpanel.h: 52: }
+"52
 [e :UE 476 ]
 }
 [v $root$_isr `(v ~T0 @X0 0 e ]
@@ -6905,90 +6903,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 "943
 }
 [e :U 656 ]
-[; ;master_eight.c: 941: }
-[; ;master_eight.c: 943: }
-[; ;master_eight.c: 946: if(copy_parentalLockBuffer[1] == '0' && M4 == 1 && PORTAbits.RA5 == 1)
-"946
-[e $ ! && && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 1 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M4 -> -> 1 `i `ui == -> . . _PORTAbits 0 5 `i -> 1 `i 663  ]
-[; ;master_eight.c: 947: {
-"947
-{
-[; ;master_eight.c: 949: sendFeedback_TO_Gateway('1','1');
-"949
-[e ( _sendFeedback_TO_Gateway (2 , -> -> 49 `ui `uc -> -> 49 `ui `uc ]
-[; ;master_eight.c: 950: PORTEbits.RE5= 1;
-"950
-[e = . . _PORTEbits 0 5 -> -> 1 `i `uc ]
-[; ;master_eight.c: 951: M4 = 0;
-"951
-[e = _M4 -> -> 0 `i `ui ]
-"952
-}
-[e :U 663 ]
-[; ;master_eight.c: 952: }
-[; ;master_eight.c: 953: if(copy_parentalLockBuffer[1] == '0' && M4 == 0 && PORTAbits.RA5 == 0)
-"953
-[e $ ! && && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 1 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M4 -> -> 0 `i `ui == -> . . _PORTAbits 0 5 `i -> 0 `i 664  ]
-[; ;master_eight.c: 954: {
-"954
-{
-[; ;master_eight.c: 956: sendFeedback_TO_Gateway('1','0');
-"956
-[e ( _sendFeedback_TO_Gateway (2 , -> -> 49 `ui `uc -> -> 48 `ui `uc ]
-[; ;master_eight.c: 957: PORTEbits.RE5= 0;
-"957
-[e = . . _PORTEbits 0 5 -> -> 0 `i `uc ]
-[; ;master_eight.c: 958: M4 = 1;
-"958
-[e = _M4 -> -> 1 `i `ui ]
-"959
-}
-[e :U 664 ]
-[; ;master_eight.c: 959: }
-[; ;master_eight.c: 961: if(copy_parentalLockBuffer[2] == '0' && M5 == 1 && PORTFbits.RF2 == 1)
-"961
-[e $ ! && && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 2 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M5 -> -> 1 `i `ui == -> . . _PORTFbits 0 2 `i -> 1 `i 665  ]
-[; ;master_eight.c: 962: {
-"962
-{
-[; ;master_eight.c: 964: sendFeedback_TO_Gateway('2','1');
-"964
-[e ( _sendFeedback_TO_Gateway (2 , -> -> 50 `ui `uc -> -> 49 `ui `uc ]
-[; ;master_eight.c: 965: PORTAbits.RA2= 1;
-"965
-[e = . . _PORTAbits 0 2 -> -> 1 `i `uc ]
-[; ;master_eight.c: 966: M5 = 0;
-"966
-[e = _M5 -> -> 0 `i `ui ]
-"967
-}
-[e :U 665 ]
-[; ;master_eight.c: 967: }
-[; ;master_eight.c: 968: if(copy_parentalLockBuffer[1] == '0' && M5 == 0 && PORTFbits.RF2 == 0)
-"968
-[e $ ! && && == -> *U + &U _copy_parentalLockBuffer * -> -> -> 1 `i `ui `ux -> -> # *U &U _copy_parentalLockBuffer `ui `ux `ui -> 48 `ui == _M5 -> -> 0 `i `ui == -> . . _PORTFbits 0 2 `i -> 0 `i 666  ]
-[; ;master_eight.c: 969: {
-"969
-{
-[; ;master_eight.c: 971: sendFeedback_TO_Gateway('2','0');
-"971
-[e ( _sendFeedback_TO_Gateway (2 , -> -> 50 `ui `uc -> -> 48 `ui `uc ]
-[; ;master_eight.c: 972: PORTAbits.RA2= 0;
-"972
-[e = . . _PORTAbits 0 2 -> -> 0 `i `uc ]
-[; ;master_eight.c: 973: M5 = 1;
-"973
-[e = _M5 -> -> 1 `i `ui ]
-"974
-}
-[e :U 666 ]
 "975
 }
 [e :U 647 ]
 "877
 [e $U 648  ]
 [e :U 649 ]
-[; ;master_eight.c: 974: }
+[; ;master_eight.c: 941: }
+[; ;master_eight.c: 943: }
 [; ;master_eight.c: 975: }
 [; ;master_eight.c: 976: }
 "976
@@ -7038,7 +6960,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _clearAllPorts ..  ]
 [; ;master_eight.c: 1006: }
 "1006
-[e :UE 667 ]
+[e :UE 663 ]
 }
 "1011
 [v _allPeripheralInit `(v ~T0 @X0 1 ef ]
@@ -7063,7 +6985,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _CCP9_Initialize ..  ]
 [; ;master_eight.c: 1018: }
 "1018
-[e :UE 668 ]
+[e :UE 664 ]
 }
 "1023
 [v _EUSART_Initialize `(v ~T0 @X0 1 ef ]
@@ -7109,7 +7031,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _RC1STAbits 0 7 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1059: }
 "1059
-[e :UE 669 ]
+[e :UE 665 ]
 }
 "1060
 [v _EUSART2_Initialize `(v ~T0 @X0 1 ef ]
@@ -7155,7 +7077,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _RC2STAbits 0 7 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1095: }
 "1095
-[e :UE 670 ]
+[e :UE 666 ]
 }
 "1098
 [v _TMR1_Initialize `(v ~T0 @X0 1 ef ]
@@ -7191,7 +7113,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _PEIE -> -> 1 `i `b ]
 [; ;master_eight.c: 1127: }
 "1127
-[e :UE 671 ]
+[e :UE 667 ]
 }
 "1129
 [v _TMR3_Initialize `(v ~T0 @X0 1 ef ]
@@ -7227,7 +7149,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _PEIE -> -> 1 `i `b ]
 [; ;master_eight.c: 1158: }
 "1158
-[e :UE 672 ]
+[e :UE 668 ]
 }
 "1159
 [v _CCP9_Initialize `(v ~T0 @X0 1 ef ]
@@ -7252,7 +7174,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIE4bits 0 6 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1179: }
 "1179
-[e :UE 673 ]
+[e :UE 669 ]
 }
 "1181
 [v _peripheralsEnable `(v ~T0 @X0 1 ef ]
@@ -7268,7 +7190,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _RC1STAbits 0 7 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1187: }
 "1187
-[e :UE 674 ]
+[e :UE 670 ]
 }
 "1188
 [v _AllInterruptEnable `(v ~T0 @X0 1 ef ]
@@ -7287,39 +7209,39 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIE1bits 0 5 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1198: }
 "1198
-[e :UE 675 ]
+[e :UE 671 ]
 }
 "1199
 [v _sendFeedback_TO_Gateway `(v ~T0 @X0 1 ef2`uc`uc ]
 "1200
 {
-[; ;master_eight.c: 1199: void sendFeedback_TO_Gateway(char sw_number, char sw_status)
+[; ;master_eight.c: 1199: void sendFeedback_TO_Gateway(char sw_numberN, char sw_statusS)
 [; ;master_eight.c: 1200: {
 [e :U _sendFeedback_TO_Gateway ]
 "1199
-[v _sw_number `uc ~T0 @X0 1 r1 ]
-[v _sw_status `uc ~T0 @X0 1 r2 ]
+[v _sw_numberN `uc ~T0 @X0 1 r1 ]
+[v _sw_statusS `uc ~T0 @X0 1 r2 ]
 "1200
 [f ]
 [; ;master_eight.c: 1201: TX1REG='G';_delay((unsigned long)((1)*(16000000/4000.0)));
 "1201
 [e = _TX1REG -> -> 71 `ui `uc ]
 [e ( __delay (1 -> * -> -> 1 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
-[; ;master_eight.c: 1202: TX1REG=sw_status;_delay((unsigned long)((1)*(16000000/4000.0)));
+[; ;master_eight.c: 1202: TX1REG=sw_statusS;_delay((unsigned long)((1)*(16000000/4000.0)));
 "1202
-[e = _TX1REG _sw_status ]
+[e = _TX1REG _sw_statusS ]
 [e ( __delay (1 -> * -> -> 1 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
 [; ;master_eight.c: 1203: TX1REG='0';_delay((unsigned long)((1)*(16000000/4000.0)));
 "1203
 [e = _TX1REG -> -> 48 `ui `uc ]
 [e ( __delay (1 -> * -> -> 1 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
-[; ;master_eight.c: 1204: TX1REG=sw_number;_delay((unsigned long)((1)*(16000000/4000.0)));
+[; ;master_eight.c: 1204: TX1REG=sw_numberN;_delay((unsigned long)((1)*(16000000/4000.0)));
 "1204
-[e = _TX1REG _sw_number ]
+[e = _TX1REG _sw_numberN ]
 [e ( __delay (1 -> * -> -> 1 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
 [; ;master_eight.c: 1205: }
 "1205
-[e :UE 676 ]
+[e :UE 672 ]
 }
 "1206
 [v _errorsISR `(v ~T0 @X0 1 ef1`*uc ]
@@ -7334,18 +7256,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _Tx_count -> 0 `i ]
 [; ;master_eight.c: 1208: while(Tx_count!=4)
 "1208
-[e $U 678  ]
-[e :U 679 ]
+[e $U 674  ]
+[e :U 675 ]
 [; ;master_eight.c: 1209: {
 "1209
 {
 [; ;master_eight.c: 1210: while (!TX1STAbits.TRMT);
 "1210
-[e $U 681  ]
-[e :U 682 ]
-[e :U 681 ]
-[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 682  ]
-[e :U 683 ]
+[e $U 677  ]
+[e :U 678 ]
+[e :U 677 ]
+[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 678  ]
+[e :U 679 ]
 [; ;master_eight.c: 1211: TX1REG = *errNum;
 "1211
 [e = _TX1REG *U _errNum ]
@@ -7357,14 +7279,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ++ _Tx_count -> 1 `i ]
 "1214
 }
-[e :U 678 ]
+[e :U 674 ]
 "1208
-[e $ != _Tx_count -> 4 `i 679  ]
-[e :U 680 ]
+[e $ != _Tx_count -> 4 `i 675  ]
+[e :U 676 ]
 [; ;master_eight.c: 1214: }
 [; ;master_eight.c: 1215: }
 "1215
-[e :UE 677 ]
+[e :UE 673 ]
 }
 "1216
 [v _errorsMain `(v ~T0 @X0 1 ef1`*uc ]
@@ -7379,18 +7301,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _Tx_count -> 0 `i ]
 [; ;master_eight.c: 1218: while(Tx_count!=4)
 "1218
-[e $U 685  ]
-[e :U 686 ]
+[e $U 681  ]
+[e :U 682 ]
 [; ;master_eight.c: 1219: {
 "1219
 {
 [; ;master_eight.c: 1220: while (!TX1STAbits.TRMT);
 "1220
-[e $U 688  ]
-[e :U 689 ]
-[e :U 688 ]
-[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 689  ]
-[e :U 690 ]
+[e $U 684  ]
+[e :U 685 ]
+[e :U 684 ]
+[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 685  ]
+[e :U 686 ]
 [; ;master_eight.c: 1221: TX1REG = *errNum;
 "1221
 [e = _TX1REG *U _errNum ]
@@ -7402,14 +7324,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ++ _Tx_count -> 1 `i ]
 "1224
 }
-[e :U 685 ]
+[e :U 681 ]
 "1218
-[e $ != _Tx_count -> 4 `i 686  ]
-[e :U 687 ]
+[e $ != _Tx_count -> 4 `i 682  ]
+[e :U 683 ]
 [; ;master_eight.c: 1224: }
 [; ;master_eight.c: 1225: }
 "1225
-[e :UE 684 ]
+[e :UE 680 ]
 }
 "1226
 [v _sendAcknowledgment `(v ~T0 @X0 1 ef1`*uc ]
@@ -7424,18 +7346,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _Tx_count -> 0 `i ]
 [; ;master_eight.c: 1228: while(Tx_count!=4)
 "1228
-[e $U 692  ]
-[e :U 693 ]
+[e $U 688  ]
+[e :U 689 ]
 [; ;master_eight.c: 1229: {
 "1229
 {
 [; ;master_eight.c: 1230: while (!TX1STAbits.TRMT);
 "1230
-[e $U 695  ]
-[e :U 696 ]
-[e :U 695 ]
-[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 696  ]
-[e :U 697 ]
+[e $U 691  ]
+[e :U 692 ]
+[e :U 691 ]
+[e $ ! != -> . . _TX1STAbits 0 1 `i -> -> -> 0 `i `Vuc `i 692  ]
+[e :U 693 ]
 [; ;master_eight.c: 1232: TX1REG = *currentStateBuffer;
 "1232
 [e = _TX1REG *U _currentStateBuffer ]
@@ -7447,14 +7369,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ++ _Tx_count -> 1 `i ]
 "1235
 }
-[e :U 692 ]
+[e :U 688 ]
 "1228
-[e $ != _Tx_count -> 4 `i 693  ]
-[e :U 694 ]
+[e $ != _Tx_count -> 4 `i 689  ]
+[e :U 690 ]
 [; ;master_eight.c: 1235: }
 [; ;master_eight.c: 1236: }
 "1236
-[e :UE 691 ]
+[e :UE 687 ]
 }
 "1238
 [v _copyReceivedDataBuffer `(v ~T0 @X0 1 ef ]
@@ -7470,9 +7392,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "1240
 {
 [e = _dataBufferCounter -> 2 `i ]
-[e $ < _dataBufferCounter -> 9 `i 699  ]
-[e $U 700  ]
-[e :U 699 ]
+[e $ < _dataBufferCounter -> 9 `i 695  ]
+[e $U 696  ]
+[e :U 695 ]
 {
 [; ;master_eight.c: 1241: tempReceivedDataBuffer[dataBufferCounter-2]=mainReceivedDataBuffer[dataBufferCounter];
 "1241
@@ -7484,14 +7406,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "1240
 [e ++ _dataBufferCounter -> 1 `i ]
-[e $ < _dataBufferCounter -> 9 `i 699  ]
-[e :U 700 ]
+[e $ < _dataBufferCounter -> 9 `i 695  ]
+[e :U 696 ]
 "1243
 }
 [; ;master_eight.c: 1243: }
 [; ;master_eight.c: 1244: }
 "1244
-[e :UE 698 ]
+[e :UE 694 ]
 }
 "1245
 [v _copyTouchpanelReceiveDataBuffer `(v ~T0 @X0 1 ef ]
@@ -7509,10 +7431,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 "1248
 {
 [e = _dataBufferCounter -> 2 `i ]
-[e $ < _dataBufferCounter -> 5 `i 703  ]
-[e $U 704  ]
+[e $ < _dataBufferCounter -> 5 `i 699  ]
+[e $U 700  ]
 "1249
-[e :U 703 ]
+[e :U 699 ]
 [; ;master_eight.c: 1249: {
 {
 [; ;master_eight.c: 1250: tempReceiveTouchpanelDataBuffer[dataBufferCounter-2] = touchpanleReceivedDatabuffer[dataBufferCounter];
@@ -7525,14 +7447,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "1248
 [e ++ _dataBufferCounter -> 1 `i ]
-[e $ < _dataBufferCounter -> 5 `i 703  ]
-[e :U 704 ]
+[e $ < _dataBufferCounter -> 5 `i 699  ]
+[e :U 700 ]
 "1252
 }
 [; ;master_eight.c: 1252: }
 [; ;master_eight.c: 1253: }
 "1253
-[e :UE 702 ]
+[e :UE 698 ]
 }
 "1258
 [v _pinINIT_extra `(v ~T0 @X0 1 ef ]
@@ -7564,7 +7486,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _ANSELA -> -> 0 `i `uc ]
 [; ;master_eight.c: 1270: }
 "1270
-[e :UE 706 ]
+[e :UE 702 ]
 }
 "1275
 [v _clearAllPorts `(v ~T0 @X0 1 ef ]
@@ -7580,7 +7502,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PORTEbits 0 5 -> -> 1 `i `uc ]
 [; ;master_eight.c: 1281: }
 "1281
-[e :UE 707 ]
+[e :UE 703 ]
 }
 [a 1C 35 0 ]
 

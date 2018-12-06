@@ -3,4 +3,4 @@
  ../master_eight.c  \
 ../application.h  \
 ../include.h  \
-../actionTouchpanel.h 
+../actiontouchpanel.h 

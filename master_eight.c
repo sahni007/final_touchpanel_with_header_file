@@ -943,35 +943,35 @@ int main() {
         }//end of touchpanel received data
 
        ///****************manual response*******************
-            if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == ON && INPUTDIMMER == ON)
-                  {
-
-                     sendFeedback_TO_Gateway('1','1');
-                     OUTPUT_DIMMER= 1;
-                         M4 = OFF;
-                  }
-                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == OFF && INPUTDIMMER == OFF)
-                  {
-
-                     sendFeedback_TO_Gateway('1','0');
-                     OUTPUT_DIMMER= 0;
-                         M4 = ON;
-                  }
-
-                    if(copy_parentalLockBuffer[2] == CHAR_OFF && M5 == ON && INPUTSWITCH4 == ON)
-                  {
-
-                     sendFeedback_TO_Gateway('2','1');
-                     OUTPUT_RELAY4= 1;
-                         M5 = OFF;
-                  }
-                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M5 == OFF && INPUTSWITCH4 == OFF)
-                  {
-
-                     sendFeedback_TO_Gateway('2','0');
-                     OUTPUT_RELAY4= 0;
-                         M5 = ON;
-                  }
+//            if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == ON && INPUTDIMMER == ON)
+//                  {
+//
+//                     sendFeedback_TO_Gateway('1','1');
+//                     OUTPUT_DIMMER= 1;
+//                         M4 = OFF;
+//                  }
+//                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == OFF && INPUTDIMMER == OFF)
+//                  {
+//
+//                     sendFeedback_TO_Gateway('1','0');
+//                     OUTPUT_DIMMER= 0;
+//                         M4 = ON;
+//                  }
+//
+//                    if(copy_parentalLockBuffer[2] == CHAR_OFF && M5 == ON && INPUTSWITCH4 == ON)
+//                  {
+//
+//                     sendFeedback_TO_Gateway('2','1');
+//                     OUTPUT_RELAY4= 1;
+//                         M5 = OFF;
+//                  }
+//                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M5 == OFF && INPUTSWITCH4 == OFF)
+//                  {
+//
+//                     sendFeedback_TO_Gateway('2','0');
+//                     OUTPUT_RELAY4= 0;
+//                         M5 = ON;
+//                  }
     }
 }
 
@@ -1196,12 +1196,12 @@ void AllInterruptEnable(){
     PIE1bits.RC1IE = 1;                    // handled into INTERRUPT_Initialize()
 
 }
-void sendFeedback_TO_Gateway(char sw_number, char sw_status)
+void sendFeedback_TO_Gateway(char sw_numberN, char sw_statusS)
 {
     TX1REG='G';__delay_ms(1);
-    TX1REG=sw_status;__delay_ms(1);
+    TX1REG=sw_statusS;__delay_ms(1);
     TX1REG='0';__delay_ms(1);
-    TX1REG=sw_number;__delay_ms(1);
+    TX1REG=sw_numberN;__delay_ms(1);
 }
 void errorsISR(char* errNum){
     int Tx_count=0;

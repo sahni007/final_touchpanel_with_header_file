@@ -5105,7 +5105,7 @@ break;
 
 }
 
-# 1 "../actionTouchpanel.h"
+# 1 "../actiontouchpanel.h"
 void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed)
 {
 
@@ -5132,6 +5132,7 @@ if(copy_parentalLockBuffer[1] == '0' && M1 == 1)
 {
 sendFeedback_TO_Gateway('1',sw_status);
 PORTAbits.RA2 = switch_status; M1 = 0;
+TX1REG= 'A';
 
 }
 }
@@ -5145,6 +5146,7 @@ if( copy_parentalLockBuffer[2] == '0' && M2 == 1 )
 start_PWM_Generation_in_ISR_FLAG=0;
 sendFeedback_TO_Gateway('2',sw_status);
 PORTEbits.RE5 = ~switch_status; M2 = 0;
+TX1REG= 'B';
 
 }
 
@@ -5940,36 +5942,7 @@ RC2STAbits.SPEN=1;
 
 }
 
-
-if(copy_parentalLockBuffer[1] == '0' && M4 == 1 && PORTAbits.RA5 == 1)
-{
-
-sendFeedback_TO_Gateway('1','1');
-PORTEbits.RE5= 1;
-M4 = 0;
-}
-if(copy_parentalLockBuffer[1] == '0' && M4 == 0 && PORTAbits.RA5 == 0)
-{
-
-sendFeedback_TO_Gateway('1','0');
-PORTEbits.RE5= 0;
-M4 = 1;
-}
-
-if(copy_parentalLockBuffer[2] == '0' && M5 == 1 && PORTFbits.RF2 == 1)
-{
-
-sendFeedback_TO_Gateway('2','1');
-PORTAbits.RA2= 1;
-M5 = 0;
-}
-if(copy_parentalLockBuffer[1] == '0' && M5 == 0 && PORTFbits.RF2 == 0)
-{
-
-sendFeedback_TO_Gateway('2','0');
-PORTAbits.RA2= 0;
-M5 = 1;
-}
+# 975
 }
 }
 
@@ -6177,12 +6150,12 @@ PEIE = 1;
 PIE1bits.RC1IE = 1;
 
 }
-void sendFeedback_TO_Gateway(char sw_number, char sw_status)
+void sendFeedback_TO_Gateway(char sw_numberN, char sw_statusS)
 {
 TX1REG='G';_delay((unsigned long)((1)*(16000000/4000.0)));
-TX1REG=sw_status;_delay((unsigned long)((1)*(16000000/4000.0)));
+TX1REG=sw_statusS;_delay((unsigned long)((1)*(16000000/4000.0)));
 TX1REG='0';_delay((unsigned long)((1)*(16000000/4000.0)));
-TX1REG=sw_number;_delay((unsigned long)((1)*(16000000/4000.0)));
+TX1REG=sw_numberN;_delay((unsigned long)((1)*(16000000/4000.0)));
 }
 void errorsISR(char* errNum){
 int Tx_count=0;

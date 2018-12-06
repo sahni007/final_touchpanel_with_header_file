@@ -14,7 +14,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
  }   
     else
     {
- //    TX1REG='T';
+ 
         switch(Switch_Num)
         {
 
@@ -24,6 +24,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
                   {
                        sendFeedback_TO_Gateway('1',sw_status);
                        OUTPUT_RELAY4 = switch_status; M1 = OFF;
+                      // TX1REG= 'A';
 
                   }
                }
@@ -37,6 +38,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
                         start_PWM_Generation_in_ISR_FLAG=0;
                         sendFeedback_TO_Gateway('2',sw_status);
                          OUTPUT_DIMMER =  ~switch_status;  M2 = OFF;
+                       //  TX1REG= 'B';
 
                   }
 
