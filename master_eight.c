@@ -1,10 +1,4 @@
-/*this is first comment
- * File:   main.c
- * Author: varun.sahni04@gmail.com
- *
- * Created on 10/27/2018 5:46:21 PM UTC
- * "Created in MPLAB Xpress"
- */
+
 
 /*
  * File:   varun_4_1.c
